@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import api from './api';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component{
+
+  state= {
+    produtos:[],
+  }
+
+  async componentDidMount(){
+    const resposta = await api.get('');
+    //console.log(resposta.data);
+
+    this.setState({ produtos: resposta.data });
+  }
+
+  render(){
+
+    const { produtos } = this.state;
+    let preçoComDesconto;
+
+    return(
+      
+        <div class="container">
+          <center>
+          <div class="col-md-4">
+            {produtos.map(produto => (
+              <div class="card mb-4 shadow-sm">
+                <div class="card-header">
+                  <h4 class="my-0 font-weight-normal">{produto.nome}</h4>
+                  <div class="card-body">
+                    <h1 class="card-title pricing-card-title">R${preçoComDesconto = (produto.valor - (produto.valor * (produto.desconto.replace("%","") / 100))).toFixed(2)}</h1>
+                  <ul class="list-unstyled mt-3 mb-4">
+                    <li>{produto.descricao}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          </center>
+      </div>
+        
+     
+    )
+  }
 }
 
 export default App;
